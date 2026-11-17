@@ -2,6 +2,6 @@
 export const scroll = {
   p: {} as Record<string, number>, // per-section progress 0..1 (section top at viewport bottom -> section bottom at viewport top)
   pointer: { x: 0, y: 0 },         // -1..1
-  tint: "#14160f",                  // current chapter colour, mirrored to the canvas backdrop
+  tint: "#f3eee3",                  // current chapter colour, mirrored to the canvas backdrop
 };
 export const sp = (key: string) => scroll.p[key] ?? 0;

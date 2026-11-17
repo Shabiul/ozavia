@@ -1,4 +1,4 @@
-"""Tileable granular powder: spice-albedo.png (neutral, tinted at runtime) + spice-normal.png (OpenGL / glTF +Y).
+"""Tileable granular powder: spice-albedo.png (near-white, tinted at runtime) + spice-normal.png (OpenGL / glTF +Y).
 blender -b --python blender/spice_tex.py"""
 import bpy, os
 import numpy as np
@@ -17,7 +17,7 @@ def blur(sigma):  # FFT gaussian blur of white noise: periodic, so it tiles
 
 
 h = 0.55 * blur(0.6) + 0.3 * blur(1.6) + 0.15 * blur(6.0)
-alb = np.clip(0.5 + 0.11 * h + 0.05 * blur(0.4), 0, 1)
+alb = np.clip(0.86 + 0.07 * h + 0.03 * blur(0.4), 0, 1)   # near-white: runtime tint == powder colour
 dx = (np.roll(h, -1, 1) - np.roll(h, 1, 1)) * 0.5
 dy = (np.roll(h, -1, 0) - np.roll(h, 1, 0)) * 0.5
 s = 0.9

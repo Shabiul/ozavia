@@ -5,6 +5,7 @@ export type Masala = {
   name: string;
   color: string;
   spiceColor: string;
+  powder: string[]; // particle palette, base first
   hook: string;
   era: string;
   story: string[];
@@ -17,13 +18,12 @@ export const masalas: Masala[] = [
     id: "garam",
     name: "Garam Masala",
     color: "#8e2a22",
-    spiceColor: "#7a4a22",
+    spiceColor: "#6b4428",
+    powder: ["#6b4428", "#4e301b", "#8a6038", "#a88458"],
     hook: "Warmth, not fire: the old spice routes in one spoonful.",
     era: "North India · Mughal era",
     story: [
-      "Garam means hot and masala a blend of spices, yet the heat in the name is not the burn of chilli. It points to warmth: in Ayurveda these spices are held to warm the body, and the blend has long been valued against colds. There is no fixed recipe. Households traditionally kept their own proportions.",
-      "The blend as it is known today is thought to have taken shape in the Mughal era, beside a court cookery heavy with meat. Northern versions lean on the sweeter spices: cinnamon, cloves and green cardamom.",
-      "A jar of it is also an old trade map. Black pepper and green cardamom are native to the Malabar Coast of south-west India. True cinnamon is native to Sri Lanka. Until the sixteenth century, cultivated cloves and nutmeg came only from the Moluccas and Banda islands, and cloves were reaching India before the Common Era.",
+      "Warmth, not chilli heat. The blend took its present shape in the Mughal era, and every household kept its own proportions.",
     ],
     ingredients: [
       "Black peppercorns",
@@ -77,13 +77,12 @@ export const masalas: Masala[] = [
     id: "biryani",
     name: "Biryani Masala",
     color: "#4d5a2c",
-    spiceColor: "#8a6a2a",
+    spiceColor: "#8a4526",
+    powder: ["#8a4526", "#6a321c", "#a65a32", "#c0844f"],
     hook: "Rice, meat and a sealed pot. The rest is debated.",
     era: "Persia to Hindustan · Mughal era",
     story: [
-      "The name is Persian in root. The usual derivation is from biryan, to fry or roast, and the phrase birinj biryan means fried rice. Beyond the word, historians disagree. Some hold that the dish came from Persia. Others, Lizzie Collingham among them, place it in Mughal India, where delicate Persian pilau met the pungent, spiced rice dishes of Hindustan.",
-      "The written record is thinner than the legends. Historians who have gone through the texts find the first references to biryani only around the eighteenth century, and K. T. Achaya noted that pilau is the older usage in India. The method is clearer: meat and rice in a heavy pot, sealed with dough, left over a slow fire. This is dum pukht, which tradition ties to Awadh.",
-      "From there the schools divide. Lucknow's is scented with rose and kewra. Hyderabad's kachchi biryani begins with raw marinated meat. Kolkata's carries a potato, a habit dated to the 1850s. On the Malabar coast, Thalassery cooks use short-grained kaima rice in place of basmati. The spicing they share is aromatic before it is hot: shahi jeera, mace, star anise, cardamom, cloves.",
+      "Persian in name, Mughal in method: meat and rice sealed in one pot over a slow fire.",
     ],
     ingredients: [
       "Shahi jeera (caraway)",
@@ -131,13 +130,12 @@ export const masalas: Masala[] = [
     id: "elite",
     name: "Elite All Purpose Masala",
     color: "#1f3358",
-    spiceColor: "#9a3d1c",
+    spiceColor: "#a8652a",
+    powder: ["#a8652a", "#c98a2e", "#7e4a22", "#d9a845"],
     hook: "One balanced blend for the everyday pot.",
     era: "Indus Valley · from c. 2500 BCE",
     story: [
-      "Many North Indian kitchens keep one all-round masala within reach of the stove, a blend meant for the everyday pot and not for a single dish. Its base is four spices: coriander, cumin, turmeric and chilli. Garlic, tomato and green coriander leaf are the fresh company it usually keeps.",
-      "Turmeric's roots here run deep. At Farmana, a Harappan site dated 2600 to 2200 BCE, archaeologists recovered starch grains consistent with turmeric and ginger from a cooking pot. By around 500 BCE turmeric had a settled place in Ayurvedic medicine.",
-      "Coriander and cumin are old travellers. Coriander is native to the Mediterranean basin and was placed in Tutankhamun's tomb. Cumin seeds excavated in Syria date to the second millennium BCE, and India has cooked with cumin for millennia. Chilli is the newcomer, carried to India by Portuguese ships around 1542. The blend is younger than any of its parts.",
+      "Coriander, cumin, turmeric and chilli. Turmeric was already in Harappan cooking pots more than four thousand years ago.",
     ],
     ingredients: [
       "Coriander seed",
@@ -179,13 +177,12 @@ export const masalas: Masala[] = [
     id: "pili",
     name: "Pili Mirch",
     color: "#c8601c",
-    spiceColor: "#cc5a1a",
+    spiceColor: "#d6a23a",
+    powder: ["#d6a23a", "#e6bb55", "#b8862c", "#c4692a"],
     hook: "A chilli from the Americas, with a Sanskrit name for pepper.",
     era: "The Americas to Goa · 16th century",
     story: [
-      "Pili mirch means yellow chilli. In North Indian cooking, yellow chilli powder is what a cook reaches for when a dish needs heat but should keep its own colour. It goes into the white gravies of Old Delhi and into the galouti kebab of Lucknow. The chillies are associated with the Himalayan foothills: Himachal Pradesh, and Uttarakhand, home of the Lakhori chilli.",
-      "No chilli is native to India. The plant was domesticated in Central and South America, and Columbus, meeting it there, thought it resembled black pepper. Portuguese ships brought it to India around 1542. Goa was the likely door: chillies from Goa were once known as Pernambuco pepper, after a region of Brazil.",
-      "Before that, heat meant pepper. K. T. Achaya records that the fifty dishes listed in the Ain-i-Akbari of 1590 are spiced with black pepper alone, and the word mirch itself comes from Sanskrit marich, which first meant pepper. Chillies took hold in the south and reached North India in the eighteenth century. Long pepper is now a rarity in trade. Black pepper stayed, with company.",
+      "Heat without the red. Chillies reached India on Portuguese ships around 1542.",
     ],
     // Single-spice product: listing more "ingredients" would be invention.
     ingredients: ["Dried yellow chillies"],

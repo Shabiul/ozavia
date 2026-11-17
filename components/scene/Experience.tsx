@@ -36,15 +36,15 @@ function Backdrop() {
       new THREE.ShaderMaterial({
         depthWrite: false,
         depthTest: false,
-        uniforms: { uTint: { value: new THREE.Color("#14160f") }, uAspect: { value: 1 } },
+        uniforms: { uTint: { value: new THREE.Color("#f3eee3") }, uAspect: { value: 1 } },
         vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy * 2.0, 1.0, 1.0); }`,
         fragmentShader: `
           uniform vec3 uTint; uniform float uAspect; varying vec2 vUv;
           void main(){
             vec2 p = (vUv - vec2(0.5, 0.56)) * vec2(uAspect, 1.0);
             float g = smoothstep(0.95, 0.0, length(p));
-            vec3 base = vec3(0.0036, 0.0041, 0.0027);
-            gl_FragColor = vec4(mix(base, uTint * 0.5, g * g), 1.0);
+            vec3 paper = vec3(0.896, 0.855, 0.768); // #f3eee3, matches the CSS page colour
+            gl_FragColor = vec4(mix(paper, mix(paper * 1.04, uTint, 0.16), g), 1.0);
             #include <colorspace_fragment>
           }`,
       }),
@@ -97,7 +97,7 @@ function World() {
         new THREE.MeshStandardMaterial({ color: m.spiceColor, map: spiceMap, normalMap: spiceNormal, roughness: 1 }),
       );
       const lid = inner.getObjectByName("Lid")!;
-      const burst = makeBurst(m.spiceColor);
+      const burst = makeBurst(m.powder);
       burst.position.y = lid.position.y;
       root.add(burst);
       return { root, lid, lidY: lid.position.y, burst };
@@ -150,7 +150,7 @@ function World() {
     const leave = Math.max(0, (fp - PIN_END) / (1 - PIN_END)) * vh;
     g.visible = fp > 0.1 && fp < 0.999;
     g.scale.setScalar(bs);
-    g.position.set(0, lerp(-vh, -0.75, rise) + leave, 0);
+    g.position.set(0, lerp(-vh, -1.05, rise) + leave, 0);
     g.rotation.set(lerp(0.25, 0.8, rise) + py * 0.04, -0.28 + fp * 0.5 + px * 0.08, 0);
     box.lid.rotation.x = box.lidOpen + (1 - ss(fp, 0.3, 0.44)) * LID_CLOSE;
     g.updateMatrixWorld(true);
@@ -200,8 +200,8 @@ function World() {
       // lid unscrews and the spice lifts out
       const lift = ss(cp, 0.28, 0.42) - ss(cp, 0.74, 0.86);
       const ls = side || 1;
-      j.lid.position.y = j.lidY + lift * 0.7;
-      j.lid.position.x = lift * lift * 0.45 * ls;
+      j.lid.position.y = j.lidY + lift * 0.42;
+      j.lid.position.x = lift * lift * 0.62 * ls;
       j.lid.rotation.set(0, lift * 5, -lift * 0.55 * ls);
       const b01 = THREE.MathUtils.clamp((cp - 0.33) / 0.47, 0, 1);
       const bm = j.burst.material as THREE.ShaderMaterial;
@@ -225,7 +225,7 @@ function World() {
         anchorY="middle"
       >
         OZAVIA
-        <meshStandardMaterial color="#c9a45c" metalness={1} roughness={0.32} envMapIntensity={1.6} />
+        <meshStandardMaterial color="#b48a44" metalness={1} roughness={0.36} envMapIntensity={1.2} />
       </Text>
       {jars.map((j, i) => (
         <primitive key={i} object={j.root} />
@@ -248,15 +248,15 @@ export default function Experience() {
         <World />
         <Spices />
       </Suspense>
-      <directionalLight position={[-4, 6, 5]} intensity={2.2} color="#ffe2b8" />
-      <directionalLight position={[5, 2, -4]} intensity={1.4} color="#ffd9a0" />
+      <directionalLight position={[-4, 6, 5]} intensity={2.4} color="#fff0dc" />
+      <directionalLight position={[5, 2, -4]} intensity={1.2} color="#fff4e4" />
       <Environment resolution={256} frames={1}>
-        <color attach="background" args={["#060604"]} />
-        {/* warm key from upper left, long strip rims, low fill */}
+        <color attach="background" args={["#9d978a"]} />
+        {/* daylight studio: soft key upper left, strip rims for glass edges, warm bounce from the paper below */}
         <Lightformer form="rect" intensity={7} color="#ffdcae" position={[-5, 5, 4]} scale={[5, 5, 1]} target={[0, 0, 0]} />
         <Lightformer form="rect" intensity={9} color="#fff1dc" position={[6, 1, -3]} scale={[1.2, 9, 1]} target={[0, 0, 0]} />
         <Lightformer form="rect" intensity={5} color="#ffe8c4" position={[-6, 0, -2]} scale={[0.8, 9, 1]} target={[0, 0, 0]} />
-        <Lightformer form="rect" intensity={1.6} color="#c9a45c" position={[0, -5, 2]} scale={[10, 3, 1]} target={[0, 0, 0]} />
+        <Lightformer form="rect" intensity={2.2} color="#f3eee3" position={[0, -5, 2]} scale={[10, 3, 1]} target={[0, 0, 0]} />
         <Lightformer form="ring" intensity={3} color="#ffffff" position={[0, 3, 7]} scale={2.5} target={[0, 0, 0]} />
       </Environment>
     </Canvas>

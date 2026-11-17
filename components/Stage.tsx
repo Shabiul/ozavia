@@ -48,13 +48,13 @@ export function Stage() {
       )}
       {!gone && (
         <div
-          className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0c0d09] transition-opacity duration-1000 ${ready ? "pointer-events-none opacity-0" : ""}`}
+          className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg transition-opacity duration-1000 ${ready ? "pointer-events-none opacity-0" : ""}`}
           role="status"
           aria-label="Loading"
         >
           <Wordmark className="gold-text text-6xl md:text-8xl" />
           <p className="eyebrow mt-4">Premium Spices</p>
-          <div className="mt-10 h-px w-56 bg-cream/15">
+          <div className="mt-10 h-px w-56 bg-fg/15">
             <div className="h-px bg-gold transition-[width] duration-300" style={{ width: `${mode === "static" ? 100 : progress}%` }} />
           </div>
         </div>

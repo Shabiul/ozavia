@@ -229,7 +229,26 @@ def build_jar(mats=None):
     return obs
 
 
-def export_glb(path, objs):
+def use_gpu():
+    """Cycles on the first GPU backend that has a device; CPU otherwise."""
+    sc = bpy.context.scene
+    sc.render.engine = "CYCLES"
+    prefs = bpy.context.preferences.addons["cycles"].preferences
+    for dev in ("OPTIX", "CUDA", "HIP", "METAL", "ONEAPI"):
+        try:
+            prefs.compute_device_type = dev
+        except TypeError:
+            continue
+        prefs.get_devices()
+        if any(d.type == dev for d in prefs.devices):
+            for d in prefs.devices:
+                d.use = d.type == dev
+            sc.cycles.device = "GPU"
+            return dev
+    return "CPU"
+
+
+def export_glb(path, objs, **kw):
     bpy.ops.object.select_all(action="DESELECT")
     for o in objs:
         o.select_set(True)
@@ -237,7 +256,7 @@ def export_glb(path, objs):
         filepath=path, export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
         export_draco_mesh_compression_enable=True, export_draco_mesh_compression_level=6,
         export_draco_position_quantization=14, export_draco_normal_quantization=10,
-        export_draco_texcoord_quantization=12, export_image_format="AUTO", export_animations=False)
+        export_draco_texcoord_quantization=12, export_animations=False, **{"export_image_format": "AUTO", **kw})
     print("exported", path, os.path.getsize(path), "bytes")
 
 

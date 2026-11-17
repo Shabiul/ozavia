@@ -5,7 +5,7 @@ import { useState } from "react";
 type State = { status: "idle" | "sending" | "sent"; errors: Record<string, string> };
 
 const field =
-  "w-full border-b border-cream/25 bg-transparent py-3 text-lg text-cream placeholder:text-cream/30 outline-none transition-colors focus:border-gold";
+  "w-full border-b border-fg/25 bg-transparent py-3 text-lg text-fg placeholder:text-fg/30 outline-none transition-colors focus:border-gold";
 
 export function EnquiryForm() {
   const [state, setState] = useState<State>({ status: "idle", errors: {} });
@@ -41,7 +41,7 @@ export function EnquiryForm() {
 
   const err = (k: string) =>
     state.errors[k] && (
-      <p id={`${k}-error`} className="mt-2 text-sm text-[#f0a48f]">
+      <p id={`${k}-error`} className="mt-2 text-sm text-[#a8361f]">
         {state.errors[k]}
       </p>
     );
@@ -69,7 +69,7 @@ export function EnquiryForm() {
       <button
         type="submit"
         disabled={state.status === "sending"}
-        className="group relative isolate w-fit overflow-hidden border border-gold px-10 py-4 text-xs uppercase tracking-[0.4em] text-gold transition-colors duration-500 hover:text-ink disabled:opacity-50"
+        className="group relative isolate w-fit overflow-hidden border border-gold px-10 py-4 text-xs uppercase tracking-[0.4em] text-gold transition-colors duration-500 hover:text-bg disabled:opacity-50"
       >
         <span className="absolute inset-0 -z-10 origin-bottom scale-y-0 bg-gold transition-transform duration-500 ease-out group-hover:scale-y-100" />
         {state.status === "sending" ? "Sending" : "Send enquiry"}

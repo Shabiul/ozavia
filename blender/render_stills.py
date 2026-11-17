@@ -9,7 +9,7 @@ import jar, box, spices
 from jar import principled, srgb, TEX, ROOT
 
 IDS = ["garam", "biryani", "elite", "pili"]
-SPICE = {"garam": "#7a4a22", "biryani": "#8a6a2a", "elite": "#9a3d1c", "pili": "#b5361a"}   # content/masalas.ts spiceColor
+SPICE = {"garam": "#6b4428", "biryani": "#8a4526", "elite": "#a8652a", "pili": "#d6a23a"}   # content/masalas.ts spiceColor
 OUT = os.path.join(ROOT, "public", "renders")
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 PREVIEW = "preview" in args
@@ -30,7 +30,15 @@ def tex(nt, name, non_color=False, uv_scale=None):
 
 
 def jar_mats(mid):
-    glass, _ = principled("Glass", **{"Base Color": (1, 1, 1, 1), "Roughness": 0.02, "IOR": 1.5, "Transmission Weight": 1.0})
+    glass, gb = principled("Glass", **{"Base Color": (1, 1, 1, 1), "Roughness": 0.02, "IOR": 1.5, "Transmission Weight": 1.0})
+    # shadow rays pass straight through the glass, so the powder inside is lit (Cycles has no cheap caustics)
+    nt = glass.node_tree
+    out = nt.nodes["Material Output"]
+    lp, tr, mx = nt.nodes.new("ShaderNodeLightPath"), nt.nodes.new("ShaderNodeBsdfTransparent"), nt.nodes.new("ShaderNodeMixShader")
+    nt.links.new(lp.outputs["Is Shadow Ray"], mx.inputs["Fac"])
+    nt.links.new(gb.outputs["BSDF"], mx.inputs[1])
+    nt.links.new(tr.outputs["BSDF"], mx.inputs[2])
+    nt.links.new(mx.outputs["Shader"], out.inputs["Surface"])
     lid, _ = principled("LidGold", **{"Base Color": srgb("#d9b25f"), "Metallic": 1.0, "Roughness": 0.3})
     label, b = principled(f"Label-{mid}", **{"Roughness": 0.42})
     nt = label.node_tree
@@ -43,7 +51,6 @@ def jar_mats(mid):
     mix.inputs["Factor"].default_value = 1
     mix.inputs["B"].default_value = srgb(SPICE[mid])
     nt.links.new(tex(nt, "spice-albedo.png").outputs["Color"], mix.inputs["A"])
-    mix.inputs["B"].default_value = [c * 2 for c in srgb(SPICE[mid])[:3]] + [1]   # albedo is mid-grey
     nt.links.new(mix.outputs["Result"], b.inputs["Base Color"])
     nm = nt.nodes.new("ShaderNodeNormalMap")
     nt.links.new(tex(nt, "spice-normal.png", True).outputs["Color"], nm.inputs["Color"])
@@ -66,36 +73,31 @@ def studio(cam_loc, target, lens=50, floor=True):
     sc.render.engine = "CYCLES"
     sc.cycles.samples = 24 if PREVIEW else 128
     sc.cycles.use_denoising = True
-    try:
-        prefs = bpy.context.preferences.addons["cycles"].preferences
-        for dev in ("OPTIX", "CUDA", "HIP", "METAL", "ONEAPI"):
-            try:
-                prefs.compute_device_type = dev
-                prefs.get_devices()
-                if any(d.type == dev for d in prefs.devices):
-                    for d in prefs.devices:
-                        d.use = d.type == dev
-                    sc.cycles.device = "GPU"
-                    break
-            except TypeError:
-                continue
-    except KeyError:
-        pass
+    jar.use_gpu()
     sc.cycles.max_bounces = 16
     sc.cycles.transmission_bounces = 16
     sc.render.resolution_x, sc.render.resolution_y = (960, 640) if PREVIEW else (1920, 1280)
-    sc.view_settings.view_transform = "AgX"
-    sc.view_settings.look = "AgX - Medium High Contrast"
+    # Standard keeps label/powder colours true on the bright paper set (AgX desaturated them to pastel)
+    sc.view_settings.view_transform = "Standard"
+    sc.view_settings.exposure = -0.75
     sc.render.image_settings.file_format = "WEBP"
     sc.render.image_settings.quality = 88
     w = bpy.data.worlds.new("w")
     w.use_nodes = True
-    w.node_tree.nodes["Background"].inputs["Color"].default_value = (0.004, 0.0045, 0.003, 1)
+    w.node_tree.nodes["Background"].inputs["Color"].default_value = srgb("#f3eee3")
+    w.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.55
     sc.world = w
-    if floor:
-        bpy.ops.mesh.primitive_plane_add(size=60)
-        fm, _ = principled("Floor", **{"Base Color": srgb("#16180f"), "Roughness": 0.28})
-        bpy.context.object.data.materials.append(fm)
+    if floor:   # paper sweep: flat under the subject, curving up behind it (matches the site's #f3eee3)
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=8, y_subdivisions=80, size=40)
+        sweep = bpy.context.object
+        for v in sweep.data.vertices:
+            if v.co.y > 1.5:
+                a = min(math.pi / 2, (v.co.y - 1.5) / 4)
+                v.co.y, v.co.z = 1.5 + 4 * math.sin(a), 4 * (1 - math.cos(a)) + max(0, v.co.y - 1.5 - 4 * math.pi / 2)
+        for p in sweep.data.polygons:
+            p.use_smooth = True
+        fm, _ = principled("Floor", **{"Base Color": srgb("#e7e1d7"), "Roughness": 0.5, "Specular IOR Level": 0.3})
+        sweep.data.materials.append(fm)
     def light(name, loc, energy, color, size, shape="RECTANGLE", sy=None):
         d = bpy.data.lights.new(name, "AREA")
         d.energy, d.color, d.shape, d.size = energy, color, shape, size
@@ -105,10 +107,10 @@ def studio(cam_loc, target, lens=50, floor=True):
         sc.collection.objects.link(o)
         o.location = loc
         o.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat("-Z", "Y").to_euler()
-    light("key", (-5, -5, 6), 1600, (1, 0.86, 0.68), 4)
-    light("rimR", (5, 3, 2.5), 900, (1, 0.93, 0.82), 0.6, sy=6)
-    light("rimL", (-5, 3, 2), 500, (1, 0.9, 0.76), 0.5, sy=6)
-    light("fill", (0, -7, 1), 120, (1, 0.95, 0.88), 6)
+    light("key", (-5, -5, 7), 1500, (1, 0.975, 0.94), 6)          # big soft window light
+    light("rimR", (5, 2, 2.5), 500, (1, 0.97, 0.92), 0.6, sy=6)   # strips that draw the glass edges
+    light("rimL", (-5, 2, 2), 300, (1, 0.96, 0.9), 0.5, sy=6)
+    light("fill", (2, -7, 1.5), 250, (1, 0.98, 0.95), 8)
     cd = bpy.data.cameras.new("cam")
     cd.lens = lens
     cam = bpy.data.objects.new("cam", cd)
@@ -138,7 +140,7 @@ def scene_jar(mid):
 
 
 def scene_box():
-    olive, _ = principled("BoxOlive", **{"Base Color": srgb("#3a3f2a"), "Roughness": 0.72})
+    olive = box.olive_material()
     box.make_base(olive)
     box.make_lid(olive, box.mat_image("BoxPrint", "box-lid.png", "box-lid-orm.png"))
     box.make_crinkle()
@@ -150,7 +152,7 @@ def scene_box():
 def scene_spices():
     obs = spices.build_spices()
     spots = {"StarAnise": (-0.6, 0.2, 0.3), "Cinnamon": (-0.15, 0.32, 0.5), "Cardamom": (0.2, 0.38, 0.9),
-             "Peppercorn": (0.16, -0.3, 0), "BayLeaf": (-0.52, -0.22, -0.4), "Chilli": (-0.1, -0.1, 2.6), "Garlic": (0.55, 0.0, 0)}
+             "Peppercorn": (0.16, -0.3, 0), "BayLeaf": (-0.52, -0.22, -0.4), "Chilli": (-0.1, -0.1, 2.6), "Garlic": (0.48, 0.06, 0)}
     for o in obs:
         x, y, rz = spots[o.name]
         bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
