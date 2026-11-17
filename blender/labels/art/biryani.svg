@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" fill="none" stroke="#c9a45c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<style>.p{fill:#4d5a2c}</style>
+<!--art-->
+<path d="M35 188 C 40 252, 95 292, 160 292 C 225 292, 280 252, 285 188"/>
+<ellipse cx="160" cy="188" rx="125" ry="20"/>
+<path d="M122 292 L127 305 L193 305 L198 292"/>
+<path d="M46 222 C 95 242, 225 242, 274 222"/>
+<path class="p" d="M52 188 C 58 128, 118 98, 165 98 C 214 98, 262 130, 268 188 A108 13 0 0 1 52 188 Z"/>
+<g stroke-width="2.6">
+<path d="M80 170 l9 -5M104 150 l10 2M96 180 l10 3M128 128 l9 -5M150 116 l10 1M176 112 l9 4M200 124 l9 5M222 140 l8 6M240 162 l6 8M124 160 l9 -4M150 142 l10 2M178 136 l10 -3M204 152 l9 4M228 176 l9 2M140 182 l10 2M172 164 l10 3M196 184 l10 -2M116 190 l9 3M160 192 l10 0M74 186 l8 3M214 192 l9 1M132 144 l5 -8M186 150 l4 8M158 168 l-9 4"/>
+</g>
+<path d="M198 112 C 216 86, 240 60, 262 30"/>
+<defs><g id="lf"><path d="M0 0 C 10 -9, 10 -24, 0 -34 C -10 -24, -10 -9, 0 0 Z"/><path d="M0 0 L0 -22"/></g></defs>
+<use href="#lf" transform="translate(262 30) rotate(38)"/>
+<use href="#lf" transform="translate(213 92) rotate(-22)"/><use href="#lf" transform="translate(219 85) rotate(100)"/>
+<use href="#lf" transform="translate(233 67) rotate(-18)"/><use href="#lf" transform="translate(239 60) rotate(98) scale(.9)"/>
+<use href="#lf" transform="translate(250 46) rotate(-12) scale(.8)"/>
+<!--/art-->
+</svg>

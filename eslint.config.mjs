@@ -12,7 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // vendored three.js Draco decoder
+    "public/draco/**",
   ]),
+  // r3f mutates three.js objects inside useFrame by design; the compiler's immutability rule can't model that
+  { files: ["components/scene/**"], rules: { "react-hooks/immutability": "off" } },
 ]);
 
 export default eslintConfig;

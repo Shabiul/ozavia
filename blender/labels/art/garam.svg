@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" fill="none" stroke="#c9a45c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<style>.p{fill:#8e2a22}</style>
+<!--art-->
+<g transform="translate(108 112)">
+  <g id="pt"><path d="M0 -10 C 15 -30, 16 -62, 0 -88 C -16 -62, -15 -30, 0 -10 Z"/><path d="M0 -30 C 5 -40, 5 -54, 0 -64 C -5 -54, -5 -40, 0 -30 Z"/></g>
+  <use href="#pt" transform="rotate(45)"/><use href="#pt" transform="rotate(90)"/><use href="#pt" transform="rotate(135)"/>
+  <use href="#pt" transform="rotate(180)"/><use href="#pt" transform="rotate(225)"/><use href="#pt" transform="rotate(270)"/><use href="#pt" transform="rotate(315)"/>
+  <circle r="7"/>
+</g>
+<g transform="translate(262 78) rotate(28)">
+  <path d="M0 -42 C 22 -24, 22 24, 0 42 C -22 24, -22 -24, 0 -42 Z"/>
+  <path d="M0 -42 C 8 -20, 8 20, 0 42"/><path d="M0 -42 C -8 -20, -8 20, 0 42"/><path d="M0 -42 L -1 -52"/>
+</g>
+<g transform="translate(212 272) rotate(-9)">
+  <path class="p" d="M-98 -13 L98 -13 A7 13 0 0 1 98 13 L-98 13 A7 13 0 0 1 -98 -13 Z"/>
+  <ellipse class="p" cx="98" cy="0" rx="7" ry="13"/><path d="M98 -6 A3.5 6 0 1 0 100 5"/>
+  <path d="M-92 -3 L84 -3"/><path d="M-60 6 L50 6"/>
+</g>
+<g transform="translate(196 240) rotate(-24)">
+  <path class="p" d="M-98 -13 L98 -13 A7 13 0 0 1 98 13 L-98 13 A7 13 0 0 1 -98 -13 Z"/>
+  <ellipse class="p" cx="98" cy="0" rx="7" ry="13"/><path d="M98 -6 A3.5 6 0 1 0 100 5"/>
+  <path d="M-92 -3 L84 -3"/><path d="M-70 6 L40 6"/>
+</g>
+<!--/art-->
+</svg>

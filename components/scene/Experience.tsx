@@ -169,13 +169,13 @@ function World() {
       // chapter focus
       const fs = narrow ? 1.35 * Math.min(1, vw / 2.4) : 1.95;
       const fx = side * vw * 0.24;
-      const fy = (narrow ? -0.3 : -1.2) + Math.sin(t * 0.6) * 0.03;
+      const fy = (narrow ? -vh * 0.5 + 0.35 : -1.2) + Math.sin(t * 0.6) * 0.03; // narrow: lower third, under the headline
 
       const { a, b, q, q2, e, s } = tmp;
       a.set(hx, hy, 0);
       if (i > 0) a.lerp(b.set(hx, -vh * 0.5 - 2.2, 0), heroOut); // wait below the fold
       a.lerp(b.set(fx, fy, 0), enter);
-      a.lerp(b.set(fx * 1.25, vh * 0.5 + 0.6, -2.5), exit); // leave upward
+      a.lerp(b.set(fx * 1.25, vh * 0.75 + 0.6, -2.5), exit); // leave upward, clear of the frustum at z -2.5
       let scale = lerp(lerp(hs, fs, enter), fs * 0.8, exit);
 
       const ry = lerp((1.5 - i) * 0.12 + px * 0.25, -(1 - enter) * 4.2 + Math.sin(cp * 7.5) * 0.38 + px * 0.3, enter) + exit * 3;

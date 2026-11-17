@@ -20,7 +20,7 @@ export default function Page() {
       <SmoothScroll />
       <Stage />
 
-      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-5 mix-blend-difference md:px-10">
+      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between bg-gradient-to-b from-[#0c0d09]/85 to-transparent px-6 pt-5 pb-10 md:px-10">
         <a href="#top" className="text-xl text-cream"><Wordmark /></a>
         <nav className="flex gap-6 text-[0.68rem] uppercase tracking-[0.32em] text-cream md:gap-10">
           <a href="#masalas" className="hover:text-gold">Masalas</a>
